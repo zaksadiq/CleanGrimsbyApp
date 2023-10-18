@@ -1,7 +1,16 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { Link, Tabs } from 'expo-router';
-import { Pressable, useColorScheme } from 'react-native';
+import { StyleSheet } from 'react-native';
+import { Pressable, useColorScheme, View } from 'react-native';
+import {
+ Menu,
+ MenuProvider,
+ MenuOptions,
+ MenuOption,
+ MenuTrigger,
+} from "react-native-popup-menu";
 
+import addMarkerAlert from './addMarkerAlert';
 import Colors from '../../constants/Colors';
 
 /**
@@ -25,8 +34,53 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Tab One',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          title: 'Tab One: Flag Litter.',
+          tabBarIcon: ({ color }) => <TabBarIcon name="map-pin" color={color} />,
+          headerRight: () => (
+            <View style={styles.inline}>
+            <Link href="/modal" asChild>
+              <Pressable>
+                {({ pressed }) => (
+                  <FontAwesome
+                    name="info-circle"
+                    size={25}
+                    color={Colors[colorScheme ?? 'light'].text}
+                    style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
+                  />
+                )}
+              </Pressable>
+            </Link>
+            <Link href="" asChild>
+              {/* <MenuProvider>
+                <Menu>
+                  <MenuTrigger> */}
+                      <Pressable onPress={addMarkerAlert}>
+                        {({ pressed }) => (
+                          <FontAwesome
+                            name="plus"
+                            size={25}
+                            color={Colors[colorScheme ?? 'light'].text}
+                            style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
+                          />
+                        )}
+                      </Pressable>
+                  {/* </MenuTrigger>
+                  <MenuOptions>
+                      <MenuOption onSelect={() => alert(`Save`)} text="Save" />
+                      <MenuOption onSelect={() => alert(`Delete`)} text="Delete" />
+                  </MenuOptions>
+                </Menu>
+              </MenuProvider> */}
+            </Link>
+            </View>
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="two"
+        options={{
+          title: 'Tab Two: Bounty Board.',
+          tabBarIcon: ({ color }) => <TabBarIcon name="star-o" color={color} />,
           headerRight: () => (
             <Link href="/modal" asChild>
               <Pressable>
@@ -43,13 +97,14 @@ export default function TabLayout() {
           ),
         }}
       />
-      <Tabs.Screen
-        name="two"
-        options={{
-          title: 'Tab Two',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
-        }}
-      />
     </Tabs>
   );
 }
+
+const styles = StyleSheet.create({
+  inline: {
+    display: 'flex',
+    flex: 1,
+    flexDirection: 'row',
+  },
+});
